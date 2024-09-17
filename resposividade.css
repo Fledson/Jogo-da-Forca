@@ -1,0 +1,81 @@
+/* Para tablets em orientação vertical e horizontal */
+@media screen and (max-width: 768px) {
+    body {
+        margin: 1rem;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    #imagem {
+        width: 30%;
+    }
+
+    #exibicao-palavra {
+        font-size: 2rem;
+    }
+
+    #letras-chutadas {
+        font-size: 1.5rem;
+    }
+
+    #entrada-letra {
+        font-size: 1.2rem;
+        padding: 0.5rem;
+    }
+
+    button {
+        font-size: 1.2rem;
+        padding: 0.7rem 1.2rem;
+    }
+
+    #btn-dica {
+        font-size: 1rem;
+    }
+
+    #mensagem {
+        font-size: 1.2rem;
+    }
+}
+
+/* Para dispositivos móveis */
+@media screen and (max-width: 480px) {
+    body {
+        margin: 0.5rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    #imagem {
+        width: 40%;
+    }
+
+    #exibicao-palavra {
+        font-size: 1.8rem;
+    }
+
+    #letras-chutadas {
+        font-size: 1.2rem;
+    }
+
+    #entrada-letra {
+        font-size: 1rem;
+        padding: 0.4rem;
+    }
+
+    button {
+        font-size: 1rem;
+        padding: 0.6rem 1rem;
+    }
+
+    #btn-dica {
+        font-size: 0.9rem;
+    }
+
+    #mensagem {
+        font-size: 1rem;
+    }
+}

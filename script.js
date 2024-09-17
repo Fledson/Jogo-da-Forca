@@ -1,92 +1,79 @@
-
-const lista_palavras = ["javascript", "html", "css", "youtube"];
-
 let palavraEscolhida;
 let exibicaoPalavra;
 let letrasChutadas;
 let tentativasRestantes;
 let numeroErros;
+let dicas;
+const dicasUsadas = [];
+let dicaAtual = 0;
 
-// função para iniciar jogo, inicializando as variaveis
-function iniciarJogo() {
+// Função para carregar o arquivo JSON
+async function carregarPalavras() {
+    const resposta = await fetch('./palavras.json');
+    const palavras = await resposta.json();
+    return palavras;
+}
 
-    // escolher palavra aleatoria da lista
-    palavraEscolhida = lista_palavras[Math.floor(Math.random() * lista_palavras.length)];
-    
-    // Inicializar exibição de underscores "_"
+async function iniciarJogo() {
+    const palavras = await carregarPalavras();
+
+    // Escolher palavra e dicas aleatoriamente
+    const sorteio = palavras[Math.floor(Math.random() * palavras.length)];
+    palavraEscolhida = sorteio.palavra;
+    dicas = sorteio.dicas;
+    dicasUsadas.splice(0, dicasUsadas.length);
+
     exibicaoPalavra = Array(palavraEscolhida.length).fill("_");
-
-    // Inicializar a lista de palavras chutadas
     letrasChutadas = [];
-
-    // Definir o numero maximo de tentativas
     tentativasRestantes = 7;
-
-    // inicializa o numero de erros
     numeroErros = 0;
 
     document.getElementById("botao-reiniciar").style.display = "none";
     document.getElementById("mensagem").innerText = "";
+    document.getElementById("dica-btn").style.display = "block";
+    document.getElementById("dica").innerText = "";
 
     atualizarExibicao();
 }
 
-/** Função que atualiza a visualização nova da pagina a cada palavra chutada */
 function atualizarExibicao() {
-    // atualizar numero de undercores na pagina de acordo com a quantidade de letras da palavra
     document.getElementById("exibicao-palavra").innerText = exibicaoPalavra.join(" ");
-    
-    // Atualizando a quantidade de letras cutadas
     document.getElementById("letras-chutadas").innerText = `${letrasChutadas.join(", ")}`;
-
-    // Atualiza imagem
     document.getElementById("imagem").src = `./img/forca${numeroErros}.png`;
 
-    //Verificar se o jogo terminou
-    if(tentativasRestantes === 0) {
+    if (tentativasRestantes === 0) {
         encerrarJogo("Você Morreu!");
-    } else if(!exibicaoPalavra.includes("_")) {
-        encerrarJogo("Parabens você venceu!");
+    } else if (!exibicaoPalavra.includes("_")) {
+        encerrarJogo("Parabéns, você venceu!");
     }
-
 }
 
 function encerrarJogo(mensagem) {
-
-    //Desabilitar campo de digitação
     document.getElementById("entrada-letra").disabled = true;
-
-    //Exibir mensagem
     document.getElementById("mensagem").innerText = mensagem;
-
-    //Exibir botão de reinciar
     document.getElementById("botao-reiniciar").style.display = "block";
+    document.getElementById("dica-btn").style.display = "none";
 }
 
 document.getElementById("btn-chutar").addEventListener("click", () => {
-    // pagando a letra
     const entradaLetra = document.getElementById("entrada-letra");
     const letra = entradaLetra.value.toLowerCase().trim();
 
-    // verificando com expressão regular se é uma letra mesmo
-    if(!letra.match(/[a-zà-ùç]/i)){
-        alert("Por favor, insira uma letra valida");
+    if (!letra.match(/[a-zà-ùç]/i)) {
+        alert("Por favor, insira uma letra válida");
         return;
     }
 
-    // verificand
-    if(letrasChutadas.includes(letra)) {
+    if (letrasChutadas.includes(letra)) {
         alert("Você já digitou essa letra, tente outra!");
         return;
     }
 
-    // adicionando as palavras chutadas
     letrasChutadas.push(letra);
 
-    // verificando se a letra está na palavra e já fazendo a adição
-    if(palavraEscolhida.includes(letra)) {
-        for(let i=0; i < palavraEscolhida.length; i++) {
-            if(palavraEscolhida[i] === letra) {
+    if (palavraEscolhida.includes(letra)) {
+        for (let i = 0; i < palavraEscolhida.length; i++) {
+            if (palavraEscolhida[i] === letra) {
                 exibicaoPalavra[i] = letra;
             }
         }
@@ -95,11 +82,27 @@ document.getElementById("btn-chutar").addEventListener("click", () => {
         numeroErros++;
     }
 
-    
     entradaLetra.value = "";
     atualizarExibicao();
 });
 
-document.getElementById("botao-reiniciar").addEventListener("click", iniciarJogo);
+document.getElementById("dica-btn").addEventListener("click", () => {
+    // Verifica se ainda há dicas disponíveis
+    if (dicaAtual < dicas.length) {
+        // Adiciona a dica atual à lista de dicas usadas
+        dicasUsadas.push(dicas[dicaAtual]);
+        
+        // Atualiza a exibição das dicas numeradas
+        let dicasHtml = dicasUsadas.map((dica, index) => `<p>${index + 1}. ${dica}</p>`).join('');
+        document.getElementById("dicas-container").innerHTML = dicasHtml;
 
-window.load = iniciarJogo();
+        // Incrementa o contador de dicas
+        dicaAtual++;
+    } else {
+        alert("Você já usou todas as 3 dicas disponíveis!");
+    }
+});
+
+
+document.getElementById("botao-reiniciar").addEventListener("click", iniciarJogo);
+window.onload = iniciarJogo;
