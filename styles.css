@@ -1,0 +1,47 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    margin: 3.125rem;
+}
+
+#imagem {
+    width: 15%;
+}
+
+#exibicao-palavra {
+    font-size: 3em;
+    margin-bottom: 1.25rem;
+}
+
+#letras-chutadas {
+    font-size: 2em;
+    color: blue;
+    font-weight: bold;
+    margin-bottom: 1.25rem;
+}
+
+#mensagem {
+    /* display: none; */
+}
+
+.botao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#botao-reiniciar {
+    display: none;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: .625rem 1.25rem;
+    border-radius: .3125rem;
+    cursor: pointer;
+}
+
+
+#botao-reiniciar:hover {
+    background-color: #3C823E;
+}
